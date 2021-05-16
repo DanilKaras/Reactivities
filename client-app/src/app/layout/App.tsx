@@ -7,7 +7,6 @@ import { Route, useLocation } from 'react-router-dom';
 import ActivityForm from '../../features/activities/form/ActivityForm';
 import ActivityDetails from '../../features/activities/details/ActivityDetail';
 
-
 function App() {
   const location = useLocation();
   return (
@@ -27,7 +26,6 @@ function App() {
           </>
         )}
       />
-
     </>
   );
 }
