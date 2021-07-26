@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
 import { Activity, ActivityFormValues } from '../models/activity';
+import { Photo, Profile } from '../models/profile';
 import { User, UserFormValues } from '../models/user';
 import { store } from '../stores/store';
 
@@ -25,7 +26,6 @@ axios.interceptors.response.use(async response => {
     await sleep(1000);
     return response;
 }, (error: AxiosError) => {
-    debugger;
     const {data, status, config} = error.response!;
     switch(status){
         case 400: 
@@ -87,9 +87,23 @@ const Account ={
     register: (user: UserFormValues) => request.post<User>('/account/register', user)
 }
 
+const Profiles={
+    get: (username: string) => request.get<Profile>(`/profiles/${username}`),
+    uploadPhoto: (file: Blob) => {
+        let formData = new FormData();
+        formData.append('File', file);
+        return axios.post<Photo>('photo', formData, {
+            headers: {'Content-type': 'multipart/form-data'}
+        })
+    },
+    setMainPhoto: (id: string) => request.post(`/photo/${id}/setMain`, {}),
+    deletePhoto: (id: string) => request.del(`/photo/${id}`)
+}
+
 const agent = {
     Activities,
-    Account
+    Account,
+    Profiles
 }
 
 export default agent;
